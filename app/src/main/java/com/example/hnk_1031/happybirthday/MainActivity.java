@@ -34,12 +34,18 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     ListAdapter listAdapter;
     ArrayList<CustomContent> arrayList;
+    ArrayList<String> mDate;
+    ArrayList<String> mName;
+    String now;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mDate = new ArrayList<String>();
+        mName = new ArrayList<String>();
         arrayList  = new ArrayList<CustomContent>();
 
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
@@ -84,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Calendar mCalendar = Calendar.getInstance();
         final int mYear = mCalendar.get(Calendar.YEAR);
-        final int mMonth = mCalendar.get(Calendar.MONTH);
+        final int mMonth = mCalendar.get(Calendar.MONTH)+1;
         final int mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
 
         if (c1 != null) {
@@ -96,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     String date = c1.getString(c1.getColumnIndex(ContactsContract.CommonDataKinds.Event.DATA));
                     Log.e("TAG",date);
 
-                    String now;
+
 
                     if (mMonth <10 && mDay<10){
                         now =String.valueOf(mYear)+"0"+String.valueOf(mMonth)+"0"+String.valueOf(mDay);
@@ -109,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
+                    mDate.add(date);
+                    mName.add(displayName);
 
                     arrayList.add(new CustomContent(displayName,date,getAge(date,now)));
 
@@ -301,7 +309,30 @@ public class MainActivity extends AppCompatActivity {
         final int mMonth = mCalendar.get(Calendar.MONTH);
         final int mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
 
-        //ここ
+        Log.e("now1",now);
+        String nowDate = new String(now);
+        StringBuilder nowStringBuilder = new StringBuilder(nowDate);
+        nowStringBuilder.delete(0,5);
+        String nowDay =nowStringBuilder.toString();
+        Log.e("now2",nowDay);
+
+
+
+        for (int i =0 ; i < mDate.size();i++){
+
+            StringBuilder stringBuilder =new StringBuilder(mDate.get(i));
+            stringBuilder.deleteCharAt(4);
+            stringBuilder.deleteCharAt(6);
+            stringBuilder.delete(0,4);
+            String birth =stringBuilder.toString();
+            Log.e("birth",birth);
+
+            //if
+
+
+        }
+
+
 
 
 
