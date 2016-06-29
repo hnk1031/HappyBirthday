@@ -4,42 +4,49 @@
     android:layout_height="wrap_content">
 
     <LinearLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:orientation="vertical">
+        android:layout_height="70dp" android:orientation="vertical">
 
         <LinearLayout android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="horizontal">
+            android:layout_height="35dp" android:orientation="horizontal">
 
             <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/Title"
-                android:text="Title" android:textSize="20sp"
+                android:text="Title" android:textSize="30dp"
                 android:maxWidth="94sp"
                 android:layout_weight="1.46"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="#ffa500" />
 
             <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/Age1"
-                android:text="Age" android:textSize="20sp"
-                android:maxLines="1"/>
+                android:layout_height="match_parent" android:id="@+id/Age1"
+                android:text="Age" android:textSize="20dp"
+                android:maxLines="1"
+                android:textColor="#ffa500" />
 
             <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/Age2"
-                android:text="歳　" android:textSize="11sp" />
+                android:layout_height="match_parent" android:id="@+id/Age2"
+                android:text="歳　" android:textSize="20dp"
+                android:textColor="#ffa500" />
 
         </LinearLayout>
 
         <LinearLayout android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="35dp">
 
-            <ImageView android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/Image1"></ImageView>
             <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/DayKind1"
-                android:text="Birthday"></TextView>
+                android:text="Birthday"
+                android:textColor="#ffa500"
+                android:textSize="20dp"></TextView>
             <TextView android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:text="："></TextView>
+                android:layout_height="wrap_content" android:text="："
+                android:textColor="#ffa500"
+                android:textSize="20dp"></TextView>
             <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/Birthday1"
-                android:text="Birthday" />
+                android:text="Birthday"
+                android:textColor="#ffa500"
+                android:textSize="20dp" />
 
         </LinearLayout>
     </LinearLayout>

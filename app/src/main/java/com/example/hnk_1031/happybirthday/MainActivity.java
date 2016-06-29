@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         mPlanetTitles = new ArrayList<NavigationListContent>();
-        mPlanetTitles.add(new NavigationListContent("add", R.drawable.plus));
-        mPlanetTitles.add(new NavigationListContent("setting", R.drawable.setting));
+        mPlanetTitles.add(new NavigationListContent("Twitter", R.drawable.twitter));
+        mPlanetTitles.add(new NavigationListContent("Facebook", R.drawable.facebook));
         mCustomAdapter = new NavigationCustomAdapter(this, R.layout.custom_layout, mPlanetTitles);
         mDrawerList.setAdapter(mCustomAdapter);
 
@@ -96,20 +96,21 @@ public class MainActivity extends AppCompatActivity {
                     String date = c1.getString(c1.getColumnIndex(ContactsContract.CommonDataKinds.Event.DATA));
                     Log.e("TAG",date);
 
-//                    // 誕生日情報をフォーマット変換
-//                    String date_tmp = new BirthdayFormat().DateCheck(date);
-//                    Log.e("TAG",date_tmp);
+                    String now;
+
+                    if (mMonth <10 && mDay<10){
+                        now =String.valueOf(mYear)+"0"+String.valueOf(mMonth)+"0"+String.valueOf(mDay);
+                    } else if (mMonth <10 && mDay >=10) {
+                        now =String.valueOf(mYear)+"0"+String.valueOf(mMonth)+String.valueOf(mDay);
+                    } else if (mMonth >=10 && mDay<10) {
+                        now=String.valueOf(mYear)+String.valueOf(mMonth)+"0"+String.valueOf(mDay);
+                    } else {
+                        now=String.valueOf(mYear)+String.valueOf(mMonth)+String.valueOf(mDay);
+                    }
 
 
 
-
-                    arrayList.add(new CustomContent(displayName,date,"age"));
-
-
-
-
-
-
+                    arrayList.add(new CustomContent(displayName,date,getAge(date,now)));
 
 
 
@@ -125,6 +126,22 @@ public class MainActivity extends AppCompatActivity {
         listAdapter =new ListAdapter(this,android.R.layout.simple_list_item_1,arrayList);
         listView.setAdapter(listAdapter);
 
+
+    }
+
+    public String getAge(String date,String now){
+        StringBuilder stringBuilder=new StringBuilder(date);
+        stringBuilder.deleteCharAt(4);
+        stringBuilder.deleteCharAt(6);
+
+        String birth = stringBuilder.toString();
+
+        int b = Integer.parseInt(birth);
+        int n =Integer.parseInt(now);
+
+        int age = (n - b)/10000;
+
+        return String.valueOf(age);
 
     }
 
@@ -279,6 +296,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void reload(View v) {
+        // 今日の日付取得
+        final Calendar mCalendar = Calendar.getInstance();
+        final int mMonth = mCalendar.get(Calendar.MONTH);
+        final int mDay = mCalendar.get(Calendar.DAY_OF_MONTH);
+
+        //ここ
+
+
+
+
+
+
+
         //初期設定
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
         builder.setSmallIcon(R.drawable.icon);
@@ -293,8 +323,8 @@ public class MainActivity extends AppCompatActivity {
 
         //CustomLayout
         RemoteViews customView = new RemoteViews(getPackageName(), R.layout.notification);
-        customView.setTextViewText(R.id.text1, "Today's Birthday");
-        customView.setTextViewText(R.id.text2, "Birthday");
+        customView.setTextViewText(R.id.text1, "人");
+        customView.setTextViewText(R.id.text2, "Today's Birthday");
         customView.setTextViewText(R.id.text3, year+"/"+month+"/"+day);
         customView.setTextColor(R.id.text1, Color.WHITE);
         customView.setTextColor(R.id.text2, Color.WHITE);
