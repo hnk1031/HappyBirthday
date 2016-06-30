@@ -15,7 +15,8 @@
                 android:maxWidth="94sp"
                 android:layout_weight="1.46"
                 android:maxLines="1"
-                android:textColor="#ffa500" />
+                android:textColor="#ffa500"
+                android:textIsSelectable="true" />
 
             <TextView android:layout_width="wrap_content"
                 android:layout_height="match_parent" android:id="@+id/Age1"

@@ -1,6 +1,8 @@
 package com.example.hnk_1031.happybirthday;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -22,6 +24,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +54,20 @@ public class MainActivity extends AppCompatActivity {
         arrayList  = new ArrayList<CustomContent>();
 
         Intent intent = getIntent();
+
+        //通知
+        Intent intent1 = new Intent(getApplicationContext(),AlarmReceiver.class);
+        intent1.putExtra("intent_alarm_id_key", 1000);
+        PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Calendar calSet = Calendar.getInstance();
+        calSet.setTimeInMillis(System.currentTimeMillis());
+        calSet.setTimeZone(TimeZone.getDefault());
+        calSet.set(Calendar.HOUR_OF_DAY, 19);
+        calSet.set(Calendar.MINUTE, 24);
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calSet.getTimeInMillis(),AlarmManager.INTERVAL_DAY, sender);
+
+
 
         if (intent.getStringArrayListExtra("birth")!=null){
 
@@ -113,8 +130,6 @@ public class MainActivity extends AppCompatActivity {
                     String date = c1.getString(c1.getColumnIndex(ContactsContract.CommonDataKinds.Event.DATA));
                     Log.e("TAG",date);
 
-
-
                     if (mMonth <10 && mDay<10){
                         now =String.valueOf(mYear)+"0"+String.valueOf(mMonth)+"0"+String.valueOf(mDay);
                     } else if (mMonth <10 && mDay >=10) {
@@ -139,12 +154,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-
-        //listに表示
-        listView =(ListView) findViewById(R.id.listView);
-        listAdapter =new ListAdapter(this,android.R.layout.simple_list_item_1,arrayList);
-        listView.setAdapter(listAdapter);
-
 
     }
 
@@ -313,6 +322,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.d("test", "onResume");
+        listView =(ListView) findViewById(R.id.listView);
+        listAdapter =new ListAdapter(this,android.R.layout.simple_list_item_1,arrayList);
+
+        listView.setAdapter(listAdapter);
+    }
+
 
     public void reload(View v) {
         // 今日の日付取得
@@ -340,7 +360,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("birth",birth);
 
             if (nowDay.equals(birth)) {
-                mBirthday.add(String.valueOf(i));
+                mBirthday.add(mName.get(i));
             }
 
         }
