@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         mPlanetTitles = new ArrayList<NavigationListContent>();
         mPlanetTitles.add(new NavigationListContent("Twitter", R.drawable.twitter));
         mPlanetTitles.add(new NavigationListContent("Facebook", R.drawable.facebook));
+        mPlanetTitles.add(new NavigationListContent("Gmail",R.drawable.gmail));
         mCustomAdapter = new NavigationCustomAdapter(this, R.layout.custom_layout, mPlanetTitles);
         mDrawerList.setAdapter(mCustomAdapter);
 
