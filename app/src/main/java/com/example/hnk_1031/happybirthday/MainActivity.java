@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<CustomContent> arrayList;
     ArrayList<String> mDate;
     ArrayList<String> mName;
+    static ArrayList<String> mBirthday;
     String now;
 
 
@@ -46,7 +47,16 @@ public class MainActivity extends AppCompatActivity {
 
         mDate = new ArrayList<String>();
         mName = new ArrayList<String>();
+        mBirthday = new ArrayList<String>();
         arrayList  = new ArrayList<CustomContent>();
+
+        Intent intent = getIntent();
+
+        if (intent.getStringArrayListExtra("birth")!=null){
+
+        mBirthday.addAll(intent.getStringArrayListExtra("birth"));
+
+        }
 
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -109,9 +119,9 @@ public class MainActivity extends AppCompatActivity {
                     } else if (mMonth <10 && mDay >=10) {
                         now =String.valueOf(mYear)+"0"+String.valueOf(mMonth)+String.valueOf(mDay);
                     } else if (mMonth >=10 && mDay<10) {
-                        now=String.valueOf(mYear)+String.valueOf(mMonth)+"0"+String.valueOf(mDay);
+                        now =String.valueOf(mYear)+String.valueOf(mMonth)+"0"+String.valueOf(mDay);
                     } else {
-                        now=String.valueOf(mYear)+String.valueOf(mMonth)+String.valueOf(mDay);
+                        now =String.valueOf(mYear)+String.valueOf(mMonth)+String.valueOf(mDay);
                     }
 
 
@@ -312,9 +322,10 @@ public class MainActivity extends AppCompatActivity {
         Log.e("now1",now);
         String nowDate = new String(now);
         StringBuilder nowStringBuilder = new StringBuilder(nowDate);
-        nowStringBuilder.delete(0,5);
+        nowStringBuilder.delete(0,4);
         String nowDay =nowStringBuilder.toString();
         Log.e("now2",nowDay);
+        mBirthday.clear();
 
 
 
@@ -327,8 +338,9 @@ public class MainActivity extends AppCompatActivity {
             String birth =stringBuilder.toString();
             Log.e("birth",birth);
 
-            //if
-
+            if (nowDay.equals(birth)) {
+                mBirthday.add(String.valueOf(i));
+            }
 
         }
 
@@ -336,42 +348,41 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+            //初期設定
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+            builder.setSmallIcon(R.drawable.icon);
 
 
+            Calendar cal = Calendar.getInstance();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            month++;
+            int day = cal.get(Calendar.DAY_OF_MONTH);
 
 
-        //初期設定
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-        builder.setSmallIcon(R.drawable.icon);
+            //CustomLayout
+            RemoteViews customView = new RemoteViews(getPackageName(), R.layout.notification);
+            customView.setTextViewText(R.id.text1, String.valueOf(mBirthday.size()) + "人");
+            customView.setTextViewText(R.id.text2, "Today's Birthday");
+            customView.setTextViewText(R.id.text3, year + "/" + month + "/" + day);
+            customView.setTextColor(R.id.text1, Color.WHITE);
+            customView.setTextColor(R.id.text2, Color.WHITE);
+            customView.setTextColor(R.id.text3, Color.WHITE);
+            customView.setImageViewResource(R.id.imageView, R.drawable.birthday);
+            builder.setContent(customView);
+
+            //クリック時の処理
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            intent.putStringArrayListExtra("birth",mBirthday);
+            PendingIntent contentIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(contentIntent);
+            builder.setAutoCancel(true);
+
+            //作成
+            NotificationManagerCompat manager = NotificationManagerCompat.from(getApplicationContext());
+            manager.notify(0, builder.build());
 
 
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        month ++;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
-
-        //CustomLayout
-        RemoteViews customView = new RemoteViews(getPackageName(), R.layout.notification);
-        customView.setTextViewText(R.id.text1, "人");
-        customView.setTextViewText(R.id.text2, "Today's Birthday");
-        customView.setTextViewText(R.id.text3, year+"/"+month+"/"+day);
-        customView.setTextColor(R.id.text1, Color.WHITE);
-        customView.setTextColor(R.id.text2, Color.WHITE);
-        customView.setTextColor(R.id.text3, Color.WHITE);
-        customView.setImageViewResource(R.id.imageView, R.drawable.birthday);
-        builder.setContent(customView);
-
-        //クリック時の処理
-        Intent intent = new Intent(MainActivity.this, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
-        builder.setAutoCancel(true);
-
-        //作成
-        NotificationManagerCompat manager = NotificationManagerCompat.from(getApplicationContext());
-        manager.notify(0, builder.build());
 
     }
 

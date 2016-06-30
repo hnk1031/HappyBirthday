@@ -1,6 +1,7 @@
 package com.example.hnk_1031.happybirthday;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,15 @@ public class ListAdapter extends ArrayAdapter<CustomContent>{
         viewHolder.title.setText(customContent.getTitle());
         viewHolder.birthday.setText(customContent.getBirthday());
         viewHolder.age.setText(customContent.getAge());
+
+        for (int i = 0;i< MainActivity.mBirthday.size();i++ ){
+            if (MainActivity.mBirthday.get(i).equals(String.valueOf(i))){
+
+                viewHolder.title.setTextColor(Color.RED);
+                Log.e("TAG","TAG");
+
+            }
+        }
 
 
 
