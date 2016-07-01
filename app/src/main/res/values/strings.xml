@@ -2,7 +2,4 @@
     <string name="app_name">HappyBirthday</string>
     <string name="open">OPEN</string>
     <string name="close">CLOSE</string>
-    <string name="msg_message_alarm_title">TITLE</string>
-    <string name="msg_message_alarm_content">CONTENT</string>
-    <string name="msg_message_alarm_ticker">TICKER</string>
 </resources>

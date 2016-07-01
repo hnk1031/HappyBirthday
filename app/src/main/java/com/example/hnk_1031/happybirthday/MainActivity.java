@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RemoteViews;
 
@@ -27,6 +29,12 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final int GMAIL =0;
+    private final int FACEBOOK =1;
+    private final int TWITTER =2;
+    private final String[] sharePackages = {"com.google.android.gm","jp.naver.line.android","com.facebook.katana","com.twitter.android"};
+
 
     ArrayList<NavigationListContent> mPlanetTitles;
     ListView mDrawerList;
@@ -51,34 +59,31 @@ public class MainActivity extends AppCompatActivity {
         mDate = new ArrayList<String>();
         mName = new ArrayList<String>();
         mBirthday = new ArrayList<String>();
-        arrayList  = new ArrayList<CustomContent>();
+        arrayList = new ArrayList<CustomContent>();
+
 
         Intent intent = getIntent();
 
-        //通知
-        Intent intent1 = new Intent(getApplicationContext(),AlarmReceiver.class);
-        intent1.putExtra("intent_alarm_id_key", 1000);
-        PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        Calendar calSet = Calendar.getInstance();
-        calSet.setTimeInMillis(System.currentTimeMillis());
-        calSet.setTimeZone(TimeZone.getDefault());
-        calSet.set(Calendar.HOUR_OF_DAY, 19);
-        calSet.set(Calendar.MINUTE, 24);
-        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calSet.getTimeInMillis(),AlarmManager.INTERVAL_DAY, sender);
+        Intent it = new Intent(this, TestService.class);
+        it.putExtra(Intent.EXTRA_TEXT, "Welcome!");
+        int requestCode = 5;
+        PendingIntent pendingIntent = PendingIntent.getService(this, requestCode, it, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 
 
 
-        if (intent.getStringArrayListExtra("birth")!=null){
+        //manager.set(AlarmManager.RTC, c.getTimeInMillis(), pendingIntent);
+        manager.set(AlarmManager.ELAPSED_REALTIME, 15000, pendingIntent);
 
-        mBirthday.addAll(intent.getStringArrayListExtra("birth"));
 
+        if (intent.getStringArrayListExtra("birth") != null) {
+
+            mBirthday.addAll(intent.getStringArrayListExtra("birth"));
         }
 
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
 
 
         mToolbar.setTitle("Birthday");
@@ -87,24 +92,27 @@ public class MainActivity extends AppCompatActivity {
 
 
         mPlanetTitles = new ArrayList<NavigationListContent>();
-        mPlanetTitles.add(new NavigationListContent("Twitter", R.drawable.twitter));
+        mPlanetTitles.add(new NavigationListContent("GMAIL", R.drawable.gmail));
         mPlanetTitles.add(new NavigationListContent("Facebook", R.drawable.facebook));
-        mPlanetTitles.add(new NavigationListContent("Gmail",R.drawable.gmail));
+        mPlanetTitles.add(new NavigationListContent("Twitter", R.drawable.twitter));
         mCustomAdapter = new NavigationCustomAdapter(this, R.layout.custom_layout, mPlanetTitles);
+
         mDrawerList.setAdapter(mCustomAdapter);
 
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,
-                mDrawerLayout,
-                mToolbar,
-                R.string.open,
-                R.string.close
-        ) {
 
 
-        };
 
-        Uri uri = ContactsContract.Data.CONTENT_URI;
+
+    mDrawerToggle = new ActionBarDrawerToggle(
+            this,
+            mDrawerLayout,
+            mToolbar,
+            R.string.open,
+            R.string.close
+            ) {
+    };
+
+    Uri uri = ContactsContract.Data.CONTENT_URI;
         String[] projection = new String[] { ContactsContract.CommonDataKinds.Event.CONTACT_ID,
                 ContactsContract.CommonDataKinds.Event.DISPLAY_NAME, ContactsContract.CommonDataKinds.Event.DATA, ContactsContract.CommonDataKinds.Event.TYPE };
         String selection = ContactsContract.Contacts.Data.MIMETYPE + "=? AND (" + ContactsContract.CommonDataKinds.Event.TYPE + "=? OR "
