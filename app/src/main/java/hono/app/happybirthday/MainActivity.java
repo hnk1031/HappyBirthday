@@ -1,4 +1,4 @@
-package com.example.hnk_1031.happybirthday;
+package hono.app.happybirthday;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -64,16 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        Intent it = new Intent(this, TestService.class);
-        it.putExtra(Intent.EXTRA_TEXT, "Welcome!");
-        int requestCode = 5;
-        PendingIntent pendingIntent = PendingIntent.getService(this, requestCode, it, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 
-
-
-        //manager.set(AlarmManager.RTC, c.getTimeInMillis(), pendingIntent);
-        manager.set(AlarmManager.ELAPSED_REALTIME, 15000, pendingIntent);
 
 
         if (intent.getStringArrayListExtra("birth") != null) {

@@ -1,4 +1,4 @@
-package com.example.hnk_1031.happybirthday;
+package hono.app.happybirthday;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

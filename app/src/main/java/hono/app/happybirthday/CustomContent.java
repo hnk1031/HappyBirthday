@@ -1,4 +1,4 @@
-package com.example.hnk_1031.happybirthday;
+package hono.app.happybirthday;
 
 /**
  * Created by hnk_1031 on 16/06/29.
