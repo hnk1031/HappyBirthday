@@ -90,11 +90,69 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerList.setAdapter(mCustomAdapter);
 
+        //アプリintent 
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() { 
+          @Override 
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) { 
+                if (i == 0) { 
+                    if (isShareAppInstall(GMAIL)) { 
+                        Intent intent2 = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:")); 
+                        intent2.setPackage(sharePackages[GMAIL]); 
+                        intent2.putExtra(Intent.EXTRA_SUBJECT, "メールの題名"); 
+                        intent2.putExtra(Intent.EXTRA_TEXT, "メールの内容"); 
+                        startActivity(intent2); 
+                    } else { 
+                        shareAppDl(GMAIL); 
+                    } 
+                }  
+                if (i == 1) { 
+                    if (isShareAppInstall(FACEBOOK)) { 
+                        Intent intent3 = new Intent(); 
+                        intent3.setAction(Intent.ACTION_SEND); 
+                        intent3.setPackage(sharePackages[FACEBOOK]); 
+                        intent3.setType("text/plain"); 
+
+                        intent3.putExtra(Intent.EXTRA_TEXT, "http://www.yahoo.co.jp/"); 
+                        startActivity(intent3); 
+                    } else { 
+                        shareAppDl(FACEBOOK); 
+                    } 
+                } 
+                if (i == 2) { 
+                    if (isShareAppInstall(TWITTER)) { 
+                        Intent intent4 = new Intent(); 
+                        intent4.setAction(Intent.ACTION_SEND); 
+                        intent4.setPackage(sharePackages[TWITTER]); 
+                        intent4.setType("image/png"); 
+                        intent4.putExtra(Intent.EXTRA_TEXT, "Twitter本文"); 
+                        startActivity(intent4); 
+                    } else { 
+                        shareAppDl(TWITTER); 
+                    } 
+                } 
+            } 
+        }); 
+    }
+       private Boolean isShareAppInstall(int shareId) { 
+        try { 
+            PackageManager pm = getPackageManager(); 
+            pm.getApplicationInfo(sharePackages[shareId], PackageManager.GET_META_DATA); 
+            return true; 
+        } catch (PackageManager.NameNotFoundException e) { 
+            return false; 
+        }
+    }
+          private void shareAppDl(int shareId){ 
+        Uri uri = Uri.parse("market://details?id="+sharePackages[shareId]); 
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri); 
+        startActivity(intent); }
 
 
 
 
-    mDrawerToggle = new ActionBarDrawerToggle(
+
+
+        mDrawerToggle = new ActionBarDrawerToggle(
             this,
             mDrawerLayout,
             mToolbar,
